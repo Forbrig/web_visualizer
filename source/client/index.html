@@ -15,39 +15,64 @@
         <div class = "col-md-4 col-sm-4 col-xs-12"></div>
         <div class = "col-md-4 col-sm-4 col-xs-12 form-container">
 
-          <ul class = "nav nav-tabs" role = "tablist">
-            <li class = "nav-item active">
-              <a href = "#login" data-toggle = "tab">Login</a>
+          <ul class = "nav nav-pills nav-fill" role = "tablist">
+            <li class = "nav-item">
+              <a class = "nav-link active" href = "#login" data-toggle = "tab">Login</a>
             </li>
             <li class = "nav-item">
-              <a href = "#signup" data-toggle = "tab">Sign Up</a>
+              <a class = "nav-link" href = "#signup" data-toggle = "tab">Sign Up</a>
             </li>
           </ul>
 
           <div class = "tab-content">
-            <div class = "tab-pane show active fade" id = "login">
-              <h1>Welcome Back!</h1>
+            <div class = "tab-pane show active fade mt-4" id = "login">
+              <h1 class = "text-center">Welcome Back!</h1>
               <form id = "login">
-
                 <div class = "form-group">
-                  <label for = "exampleInputEmail1">Email</label>
-                  <input type = "email" class = "form-control" id = "exampleInputEmail1" placeholder = "Email">
-                </div>
+                    <label for = "emailLoginInput">Email address</label>
+                    <input type = "email" class = "form-control" id = "emailLoginInput" aria-describedby = "emailHelp" placeholder = "Enter email" required>
+                    <small id = "emailHelp" class = "form-text">We'll never share your email with anyone else.</small>
+                  </div>
+                  <div class = "form-group">
+                    <label for = "passwordLoginInput">Password</label>
+                    <input type = "password" class = "form-control" id = "passwordLoginInput" placeholder = "Password" required>
+                  </div>
+                  <div class = "form-check">
+                    <input type = "checkbox" class="form-check-input" id="exampleCheck1">
+                    <label class = "form-check-label" for = "exampleCheck1">Remember me!</label>
+                  </div>
 
+                  <br>
+                  <button type = "submit" class = "btn btn-primary btn-block">Login</button>
               </form>
-              <button type = "submit" class = "btn btn-primary btn-block">Login</button>
             </div>
 
-            <div class = "tab-pane fade" id = "signup">
-                <h1>Sign up now!</h1>
-
+            <div class = "tab-pane fade mt-4" id = "signup">
+                <h1 class = "text-center">Sign up now!</h1>
                 <form id = "signup">
                   <div class = "form-group">
                     <label for = "firstNameInput">First Name</label>
-                    <input type = "text" class = "form-control" id = "firstNameInput" placeholder = "First Name">
+                    <input type = "text" class = "form-control" id = "firstNameInput" placeholder = "First Name" required>
                   </div>
+                  <div class = "form-group">
+                    <label for = "lastNameInput">Last Name</label>
+                    <input type = "text" class = "form-control" id = "lastNameInput" placeholder = "Last Name" required>
+                  </div>
+                  <div class = "form-group">
+                    <label for = "emailRegisterInput">Email</label>
+                    <input type = "email" class = "form-control" id = "emailRegisterInput" placeholder = "Email" required>
+                  </div>
+                  <div class = "form-group">
+                    <label for = "passwordRegisterInput">Password</label>
+                    <input type = "password" class = "form-control" id = "passwordRegisterInput" placeholder = "Password" required>
+                  </div>
+                  <div class = "form-group">
+                    <label for = "confirmPasswordInput">Confirm Password</label>
+                    <input type = "password" class = "form-control" id = "confirmPasswordInput" placeholder = "Confirm Password" required>
+                  </div>
+                  <br>
+                  <button type = "submit" class = "btn btn-primary btn-block">Register!</button>
                 </form>
-                <button type = "submit" class = "btn btn-primary btn-block">Register!</button>
               </div>
             </div>
           </div>
