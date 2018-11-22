@@ -7,7 +7,7 @@
 
   if ($result->num_rows == 0) {
     $_SESSION['message'] = "Email incorrect!";
-    header("location: error.php");
+    header("location: index.php");
   } else {
     $user = $result->fetch_assoc();
     if (password_verify($_POST['passwordLogin'], $user['password'])) {
@@ -18,16 +18,10 @@
 
       $_SESSION['logged_in'] = true;
 
-      echo "
-        <div class = \"alert alert-success alert-dismissible fade in\">
-          <a href = \"#\" class = \"close\" data-dismiss = \"alert\" aria-label = \"close\">&times;</a>
-          <strong>Success!</strong> This alert box could indicate a successful or positive action.
-        </div>
-      ";
       header("location: home.php");
     } else {
       $_SESSION['message'] = "Password incorrect!";
-      header("location: error.php");
+      header("location: index.php");
     }
   }
 ?>

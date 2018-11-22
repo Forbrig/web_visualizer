@@ -22,17 +22,17 @@
   if ($result->num_rows > 0) {
     echo "Free email"."<br />";
     $_SESSION['message'] = 'This email is already registered!';
-    header("location: error.php");
+    header("location: index.php");
   } else {
     $sql = "INSERT INTO users (first_name, last_name, email, password, hash) VALUES ('$first_name', '$last_name', '$email', '$password', '$hash')";
 
     if ($mysqli->query($sql)) {
       $_SESSION['logged_in'] = true;
 
-      header("location: home.php");
+      header("location: index.php");
     } else {
       $_SESSION['message'] = 'Registration failed!';
-      header("location: error.php");
+      header("location: index.php");
     }
   }
 

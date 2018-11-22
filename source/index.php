@@ -6,8 +6,9 @@
 <!DOCTYPE html>
 <html lang = "pt-br">
   <head>
-    <meta charset = "utf-8">
     <title>Web Visualizer</title>
+    <meta charset = "utf-8">
+    <meta name = "viewport" content = "width = device-width, initial-scale = 1.0">
     <link href = "css/style.css" type = "text/css" rel = "stylesheet">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
@@ -27,21 +28,23 @@
     }
   ?>
 
-  <script type = "text/javascript">
-    $('#passwordRegister, #confirmPassword').on('keyup', function () {
-      if ($('#passwordRegister').val() == $('#confirmPassword').val()) {
-        $('#checkPasswordMatch').html('Matching').css('color', 'green');
-      } else {
-        $('#checkPasswordMatch').html('Not Matching').css('color', 'red');
-      }
-    });
-  </script>
-
   <body>
-    <div class = "container-fluid bg">
+    <div class = "container-fluid">
       <div class = "row">
         <div class = "col-md-4 col-sm-4 col-xs-12"></div>
         <div class = "col-md-4 col-sm-4 col-xs-12 form-container">
+
+          <?php
+            if (isset($_SESSION['message']) and !empty($_SESSION['message'])) {
+              echo "
+              <div class = 'alert alert-danger alert-dismissible fade show' role = 'alert'>
+              ".$_SESSION['message']."
+                <button type = 'button' class = 'close' data-dismiss = 'alert' aria-label = 'Close'>
+                  <span aria-hidden = 'true'>&times;</span>
+                </button>
+              </div>";
+            }
+          ?>
 
           <ul class = "nav nav-pills nav-fill" role = "tablist">
             <li class = "nav-item">
@@ -57,6 +60,7 @@
               <h1 class = "text-center">Welcome Back!</h1>
               <form id = "login" action = "index.php" method = "post">
                 <div class = "form-group">
+
                     <label for = "emailLogin">Email address</label>
                     <input type = "email" class = "form-control" id = "emailLogin" name = "emailLogin" aria-describedby = "emailHelp" placeholder = "Enter email" required>
                     <small id = "emailHelp" class = "form-text">We'll never share your email with anyone else.</small>
@@ -97,13 +101,6 @@
                   </div>
                   <div class = "form-group">
                     <label for = "confirmPassword">Confirm Password</label>
-
-                    
-
-                    <span id = 'checkPasswordMatch'></span>
-
-
-
                     <input type = "password" class = "form-control" id = "confirmPassword" name = "confirmPassword" placeholder = "Confirm Password" required>
                   </div>
                   <br>
@@ -117,5 +114,11 @@
         <div class = "col-md-4 col-sm-4 col-xs-12"></div>
       </div>
     </div>
+
+    <footer class = "py-3 footer">
+      <div class = "container">
+        <p class = "m-0 text-center text-white">Developed by Vitor Forbrig. Copyright &copy; 2018</p>
+      </div>
+    </footer>
   </body>
 </html>
