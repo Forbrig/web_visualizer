@@ -1,11 +1,4 @@
 <?php
-  ini_set('display_errors', 1);
-  ini_set('display_startup_errors', 1);
-  error_reporting(E_ALL);
-  // registration function handler
-  echo "signup.php"."<br />";
-
-
   $_SESSION['email'] = $_POST['emailRegister'];
   $_SESSION['first_name'] = $_POST['firstNameRegister'];
   $_SESSION['last_name'] = $_POST['lastNameRegister'];
@@ -20,14 +13,16 @@
   $result = $mysqli->query("SELECT * FROM users WHERE email = '$email'") or die($mysqli->error());
 
   if ($result->num_rows > 0) {
-    echo "Free email"."<br />";
+    session_destroy();
+    session_start();
     $_SESSION['message'] = 'This email is already registered!';
     header("location: index.php");
   } else {
     $sql = "INSERT INTO users (first_name, last_name, email, password, hash) VALUES ('$first_name', '$last_name', '$email', '$password', '$hash')";
 
     if ($mysqli->query($sql)) {
-      $_SESSION['logged_in'] = true;
+      session_destroy();
+      session_start();
 
       header("location: index.php");
     } else {

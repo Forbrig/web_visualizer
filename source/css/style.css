@@ -5,7 +5,6 @@ html {
 body {
   background: rgb(45,122,227);
   background: radial-gradient(circle, rgba(45,122,227,1) 0%, rgba(0,0,0,1) 100%) no-repeat;
-  min-height: 100vh;
 }
 
 .text-center {
@@ -40,21 +39,61 @@ body {
   -webkit-border-radius: 10px 10px 10px 10px;
 
   padding: 20px;
-  margin-top: 5vh;
-}
-
-.error-div {
-  background-color: #b30000;
-
-  padding: 5px;
-  align-items: baseline;
-
-  border-radius: 10px 10px 10px 10px;
-  -moz-border-radius: 10px 10px 10px 10px;
-  -webkit-border-radius: 10px 10px 10px 10px;
+  margin-top: 4vh;
+  height: 800px;
 }
 
 .nav-pills>li {
   border: 1px solid #007bff;
   border-radius: 4px;
+}
+
+.navbar-login {
+  width: 305px;
+  padding: 10px;
+  padding-bottom: 0px;
+}
+
+.navbar-login-session {
+  padding: 10px;
+  padding-bottom: 0px;
+  padding-top: 0px;
+}
+
+.upload-div {
+  background-color: #fff;
+}
+
+.gallery {
+  overflow-y: scroll;
+}
+
+.gallery .file {
+  display: inline-block;
+  margin: 10px;
+  width: 300px;
+  height: 300px;
+}
+
+.gallery .file .info {
+  padding-top: 10px;
+  background-color: #f2f2f2;
+  height: 100px;
+}
+
+.gallery .file .info .text {
+  text-align: center;
+}
+
+.gallery .file img {
+  margin-left: -1px;
+  width: 300px;
+  height: 200px;
+}
+
+.gallery .file .pdf {
+  text-align: center;
+  font-size: 200px;
+  width: 300px;
+  height: 200px;
 }
