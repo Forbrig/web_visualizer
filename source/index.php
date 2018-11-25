@@ -59,8 +59,8 @@
               <h1 class = "text-center">Welcome Back!</h1>
               <form id = "login" action = "index.php" method = "post">
                 <div class = "form-group">
-                  <label for = "emailLogin">Email address</label>
-                  <input type = "email" class = "form-control" id = "emailLogin" name = "emailLogin" aria-describedby = "emailHelp" placeholder = "Enter email" required>
+                  <label for = "emailLogin">Email</label>
+                  <input type = "email" class = "form-control" id = "emailLogin" name = "emailLogin" aria-describedby = "emailHelp" placeholder = "Email" required>
                   <small id = "emailHelp" class = "form-text">We'll never share your email with anyone else.</small>
                 </div>
                 <div class = "form-group">

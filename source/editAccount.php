@@ -1,9 +1,6 @@
 <?php
+// edit account function handler
   require 'db.php';
-  // edit account function handler
-  ini_set('display_errors', 1);
-  ini_set('display_startup_errors', 1);
-  error_reporting(E_ALL);
 
   $id = $_POST['idEdit'];
   $first_name = $_POST['firstNameEdit'];
@@ -11,7 +8,6 @@
   $email = $_POST['emailEdit'];
   $password = password_hash($_POST['passwordEdit'], PASSWORD_BCRYPT);
 
-  echo $id;
   $result = $mysqli->query("UPDATE users SET first_name = '$first_name', last_name = '$last_name', email = '$email', password = '$password' WHERE id = '$id'");
 
   if ($result) {

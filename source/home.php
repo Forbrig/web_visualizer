@@ -31,6 +31,7 @@
 
   </head>
 
+  <!-- logout function -->
   <?php
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       if (isset($_POST['logout'])) {
@@ -40,8 +41,9 @@
     }
   ?>
 
+  <!-- script to show files with fancybox -->
   <script type = "text/javascript">
-    $('[data-fancybox = "images"]').fancybox({
+    $('[data-fancybox="allfiles"]' || '[data-fancybox = "images"]' || '[data-fancybox="pdfs"]').fancybox({
       buttons : [
         'slideShow',
         'share',
@@ -53,38 +55,11 @@
         autoStart : true
       }
     });
-
-    $('[data-fancybox="allfiles"]').fancybox({
-      buttons : [
-        'slideShow',
-        'share',
-        'zoom',
-        'fullScreen',
-        'close'
-      ],
-      thumbs : {
-        autoStart : true
-      }
-    });
-
-    $('[data-fancybox="pdfs"]').fancybox({
-      buttons : [
-        'slideShow',
-        'share',
-        'zoom',
-        'fullScreen',
-        'close'
-      ],
-      thumbs : {
-        autoStart : true
-      }
-    });
-
   </script>
-
 
   <body>
 
+    <!-- top nav bar -->
     <nav class = "navbar navbar-expand-lg navbar-light bg-light">
       <a class = "navbar-brand" href = "home.php">Web Visualizer</a>
       <button class = "navbar-toggler" type = "button" data-toggle = "collapse" data-target = "#navbarToggler" aria-controls = "navbarToggler" aria-expanded = "false" aria-label = "Toggle navigation">
@@ -176,11 +151,11 @@
                 <label for = "passwordRegister">Password</label>
                 <input type = "password" class = "form-control" id = "passwordEdit" name = "passwordEdit" placeholder = "Password" required>
               </div>
-              <button type = "submit" name = "submitEditForm" class = "btn btn-primary">Save changes</button>
-            </form>
           </div>
           <div class = "modal-footer">
             <button type = "button" class = "btn btn-danger mr-auto" data-toggle = "modal" data-target = "#deleteAccountModal" data-dismiss = "modal">Delete Account</button>
+            <button type = "submit" name = "submitEditForm" class = "btn btn-primary">Save changes</button>
+            </form>
             <button type = "button" class = "btn btn-secondary" data-dismiss = "modal">Cancel</button>
           </div>
         </div>
@@ -208,7 +183,46 @@
       </div>
     </div>
 
+    <!-- edit file popup -->
+    <div class = "modal fade" id = "editFileModal" tabindex = "-1" role = "dialog" aria-labelledby = "editFileModal" aria-hidden = "true">
+      <div class = "modal-dialog modal-dialog-centered" role = "document">
+        <div class = "modal-content">
+          <div class = "modal-header">
+            <h5 class = "modal-title" id = "editFileModalTitle">Edit File</h5>
+            <button type = "button" class = "close" data-dismiss = "modal" aria-label = "Close">
+              <span aria-hidden = "true">&times;</span>
+            </button>
+          </div>
+          <div class = "modal-body">
+            <form id = "editFile" action = "editFile.php" method = "post">
+              <div class = "form-group">
+                <input type = "hidden" class = "form-control" id = "idFile" name = "idFile" value = "<?php echo $rows["id"]; ?>">
+              </div>
+              <div class = "form-group">
+                <input type = "hidden" class = "form-control" id = "idFileUser" name = "idFileUser" value = "<?php echo $rows["id_user"]; ?>">
+              </div>
+              <div class = "form-group">
+                <input type = "hidden" class = "form-control" id = "fileExt" name = "fileExt" value = "<?php echo $rows["type"]; ?>">
+              </div>
+              <div class = "form-group">
+                <input type = "hidden" class = "form-control" id = "oldFileName" name = "oldFileName" value = "<?php echo $rows["name"]; ?>">
+              </div>
+              <div class = "form-group">
+                <label for = "fileNameEdit">File Name</label>
+                <input type = "text" class = "form-control" id = "fileNameEdit" name = "fileNameEdit" placeholder = "File Name" value = "<?php echo $rows["name"]; ?>" required>
+              </div>
+          </div>
+          <div class = "modal-footer">
 
+            <button type = "submit" name = "submitEditFileForm" class = "btn btn-primary mr-auto">Save changes</button>
+            </form>
+            <button type = "button" class = "btn btn-secondary" data-dismiss = "modal">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- main home div -->
     <div class = "container-fluid">
       <div class = "row">
         <div class = "col-md-1 col-sm-4 col-xs-12"></div>
@@ -264,18 +278,42 @@
                     <a data-fancybox = "allfiles" href = "http://localhost/web_visualizer/uploads/<?php echo $rows["id_user"]."_".$rows["id"]."_".$rows["name"].".".$rows["type"]; ?>">
                       <img src = "http://localhost/web_visualizer/uploads/<?php echo $rows["id_user"]."_".$rows["id"]."_".$rows["name"].".".$rows["type"]; ?>" alt = "<?php echo $rows["name"] ?>"/>
                     </a>
-                    <div class = "info">
-                      <div class = "text">
-                        <strong>Name: </strong>
-                        <?php echo $rows["name"]; ?>
-                        <br>
-                        <strong>Type: </strong>
-                        <?php echo $rows["type"]; ?>
-                        <br>
-                        <strong>Date: </strong>
-                        <?php echo $rows["date_inserted"]; ?>
-                      </div>
+
+                    <div class = "text">
+                      <strong>Name: </strong>
+                      <?php echo $rows["name"]; ?>
+                      <br>
+                      <strong>Type: </strong>
+                      <?php echo $rows["type"]; ?>
+                      <br>
+                      <strong>Date: </strong>
+                      <?php echo $rows["date_inserted"]; ?>
                     </div>
+
+                    <div class = "modify">
+                      <button type = "button" class = "btn btn-primary" data-toggle = "modal" data-target = "#editFileModal">
+                        <span class = "fas fa-edit" aria-hidden = "true"></span>
+                      </button>
+
+                      <form id = "deleteFile" action = "deleteFile.php" method = "post">
+                        <button type = "submit" name = "submitDeleteFile" class = "btn btn-danger">
+                          <span class = "fas fa-trash-alt" aria-hidden = "true"></span>
+                        </button>
+                        <div class = "form-group">
+                          <input type = "hidden" class = "form-control" id = "idFileDelete" name = "idFileDelete" value = "<?php echo $rows["id"]; ?>">
+                        </div>
+                        <div class = "form-group">
+                          <input type = "hidden" class = "form-control" id = "idFileUserDelete" name = "idFileUserDelete" value = "<?php echo $rows["id_user"]; ?>">
+                        </div>
+                        <div class = "form-group">
+                          <input type = "hidden" class = "form-control" id = "fileExtDelete" name = "fileExtDelete" value = "<?php echo $rows["type"]; ?>">
+                        </div>
+                        <div class = "form-group">
+                          <input type = "hidden" class = "form-control" id = "fileNameDelete" name = "fileNameDelete" value = "<?php echo $rows["name"]; ?>">
+                        </div>
+                      </form>
+                    </div>
+
                   </div>
                 <?php } else { ?>
                   <div class = "border file">
@@ -293,6 +331,31 @@
                         <strong>Date: </strong>
                         <?php echo $rows["date_inserted"]; ?>
                       </div>
+
+                      <div class = "modify">
+                        <button type = "button" class = "btn btn-primary" data-toggle = "modal" data-target = "#editFileModal">
+                          <span class = "fas fa-edit" aria-hidden = "true"></span>
+                        </button>
+
+                        <form id = "deleteFile" action = "deleteFile.php" method = "post">
+                          <button type = "submit" name = "submitDeleteFile" class = "btn btn-danger">
+                            <span class = "fas fa-trash-alt" aria-hidden = "true"></span>
+                          </button>
+                          <div class = "form-group">
+                            <input type = "hidden" class = "form-control" id = "idFileDelete" name = "idFileDelete" value = "<?php echo $rows["id"]; ?>">
+                          </div>
+                          <div class = "form-group">
+                            <input type = "hidden" class = "form-control" id = "idFileUserDelete" name = "idFileUserDelete" value = "<?php echo $rows["id_user"]; ?>">
+                          </div>
+                          <div class = "form-group">
+                            <input type = "hidden" class = "form-control" id = "fileExtDelete" name = "fileExtDelete" value = "<?php echo $rows["type"]; ?>">
+                          </div>
+                          <div class = "form-group">
+                            <input type = "hidden" class = "form-control" id = "fileNameDelete" name = "fileNameDelete" value = "<?php echo $rows["name"]; ?>">
+                          </div>
+                        </form>
+                      </div>
+
                     </div>
                   </div>
                 <?php } } ?>
@@ -324,6 +387,29 @@
                         <?php echo $rows["date_inserted"]; ?>
                       </div>
                     </div>
+                    <div class = "modify">
+                      <button type = "button" class = "btn btn-primary" data-toggle = "modal" data-target = "#editFileModal">
+                        <span class = "fas fa-edit" aria-hidden = "true"></span>
+                      </button>
+
+                      <form id = "deleteFile" action = "deleteFile.php" method = "post">
+                        <button type = "submit" name = "submitDeleteFile" class = "btn btn-danger">
+                          <span class = "fas fa-trash-alt" aria-hidden = "true"></span>
+                        </button>
+                        <div class = "form-group">
+                          <input type = "hidden" class = "form-control" id = "idFileDelete" name = "idFileDelete" value = "<?php echo $rows["id"]; ?>">
+                        </div>
+                        <div class = "form-group">
+                          <input type = "hidden" class = "form-control" id = "idFileUserDelete" name = "idFileUserDelete" value = "<?php echo $rows["id_user"]; ?>">
+                        </div>
+                        <div class = "form-group">
+                          <input type = "hidden" class = "form-control" id = "fileExtDelete" name = "fileExtDelete" value = "<?php echo $rows["type"]; ?>">
+                        </div>
+                        <div class = "form-group">
+                          <input type = "hidden" class = "form-control" id = "fileNameDelete" name = "fileNameDelete" value = "<?php echo $rows["name"]; ?>">
+                        </div>
+                      </form>
+                    </div>
                   </div>
                 <?php } } ?>
 
@@ -354,14 +440,35 @@
                         <?php echo $rows["date_inserted"]; ?>
                       </div>
                     </div>
+                    <div class = "modify">
+                      <button type = "button" class = "btn btn-primary" data-toggle = "modal" data-target = "#editFileModal">
+                        <span class = "fas fa-edit" aria-hidden = "true"></span>
+                      </button>
+
+                      <form id = "deleteFile" action = "deleteFile.php" method = "post">
+                        <button type = "submit" name = "submitDeleteFile" class = "btn btn-danger">
+                          <span class = "fas fa-trash-alt" aria-hidden = "true"></span>
+                        </button>
+                        <div class = "form-group">
+                          <input type = "hidden" class = "form-control" id = "idFileDelete" name = "idFileDelete" value = "<?php echo $rows["id"]; ?>">
+                        </div>
+                        <div class = "form-group">
+                          <input type = "hidden" class = "form-control" id = "idFileUserDelete" name = "idFileUserDelete" value = "<?php echo $rows["id_user"]; ?>">
+                        </div>
+                        <div class = "form-group">
+                          <input type = "hidden" class = "form-control" id = "fileExtDelete" name = "fileExtDelete" value = "<?php echo $rows["type"]; ?>">
+                        </div>
+                        <div class = "form-group">
+                          <input type = "hidden" class = "form-control" id = "fileNameDelete" name = "fileNameDelete" value = "<?php echo $rows["name"]; ?>">
+                        </div>
+                      </form>
+                    </div>
                   </div>
 
                 <?php } } ?>
               </div>
             </div>
-
           </div>
-
         </div>
         <div class = "col-md-1 col-sm-4 col-xs-12"></div>
       </div>
