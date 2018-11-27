@@ -55,7 +55,7 @@
       </button>
 
       <div class = "collapse navbar-collapse" id = "navbarToggler">
-        <ul class = "navbar-nav mr-auto mt-2 mt-lg-0">
+        <ul class = "navbar-nav mr-auto mt-lg-1">
 
           <li class = "nav-item dropdown">
             <a href = "#" class = "dropdown-toggle" data-toggle = "dropdown">
@@ -100,11 +100,6 @@
             </ul>
           </li>
         </ul>
-
-        <form class="form-inline my-2 my-lg-0">
-          <input class="form-control mr-sm-2" type="search" placeholder="Search">
-          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-        </form>
       </div>
     </nav>
 
@@ -139,10 +134,41 @@
                 <label for = "passwordRegister">Password</label>
                 <input type = "password" class = "form-control" id = "passwordEdit" name = "passwordEdit" placeholder = "Password" required>
               </div>
-          </div>
-          <div class = "modal-footer">
-            <button type = "button" class = "btn btn-danger mr-auto" data-toggle = "modal" data-target = "#deleteAccountModal" data-dismiss = "modal">Delete Account</button>
-            <button type = "submit" name = "submitEditForm" class = "btn btn-primary">Save changes</button>
+              <div id="passwordMessage" style="display: none">
+                <p id="length" class="invalid">Minimum <b>8 characters</b></p>
+              </div>
+
+              <script>
+                var myInput = document.getElementById("passwordEdit");
+                var length = document.getElementById("length");
+
+                // When the user clicks on the password field, show the message box
+                myInput.onfocus = function() {
+                    document.getElementById("passwordMessage").style.display = "block";
+                }
+
+                // When the user clicks outside of the password field, hide the message box
+                myInput.onblur = function() {
+                    document.getElementById("passwordMessage").style.display = "none";
+                }
+
+                // When the user starts to type something inside the password field
+                myInput.onkeyup = function() {
+                  // Validate length
+                  if(myInput.value.length >= 8) {
+                    length.classList.remove("invalid");
+                    length.classList.add("valid");
+                  } else {
+                    length.classList.remove("valid");
+                    length.classList.add("invalid");
+                  }
+                }
+              </script>
+
+              </div>
+              <div class = "modal-footer">
+                <button type = "button" class = "btn btn-danger mr-auto" data-toggle = "modal" data-target = "#deleteAccountModal" data-dismiss = "modal">Delete Account</button>
+                <button type = "submit" name = "submitEditForm" class = "btn btn-primary">Save changes</button>
             </form>
             <button type = "button" class = "btn btn-secondary" data-dismiss = "modal">Cancel</button>
           </div>
@@ -166,45 +192,6 @@
           <div class = "modal-footer">
             <button type = "button" class = "btn btn-primary" data-dismiss = "modal">Cancel</button>
             <a href = "deleteAccount.php?delete=<?php echo $_SESSION['id']; ?>" class = "btn btn-danger">Confirm</a>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- edit file popup -->
-    <div class = "modal fade" id = "editFileModal" tabindex = "-1" role = "dialog" aria-labelledby = "editFileModal" aria-hidden = "true">
-      <div class = "modal-dialog modal-dialog-centered" role = "document">
-        <div class = "modal-content">
-          <div class = "modal-header">
-            <h5 class = "modal-title" id = "editFileModalTitle">Edit File</h5>
-            <button type = "button" class = "close" data-dismiss = "modal" aria-label = "Close">
-              <span aria-hidden = "true">&times;</span>
-            </button>
-          </div>
-          <div class = "modal-body">
-            <form id = "editFile" action = "editFile.php" method = "post">
-              <div class = "form-group">
-                <input type = "hidden" class = "form-control" id = "idFile" name = "idFile" value = "<?php echo $rows["id"]; ?>">
-              </div>
-              <div class = "form-group">
-                <input type = "hidden" class = "form-control" id = "idFileUser" name = "idFileUser" value = "<?php echo $rows["id_user"]; ?>">
-              </div>
-              <div class = "form-group">
-                <input type = "hidden" class = "form-control" id = "fileExt" name = "fileExt" value = "<?php echo $rows["type"]; ?>">
-              </div>
-              <div class = "form-group">
-                <input type = "hidden" class = "form-control" id = "oldFileName" name = "oldFileName" value = "<?php echo $rows["name"]; ?>">
-              </div>
-              <div class = "form-group">
-                <label for = "fileNameEdit">File Name</label>
-                <input type = "text" class = "form-control" id = "fileNameEdit" name = "fileNameEdit" placeholder = "File Name" value = "<?php echo $rows["name"]; ?>" required>
-              </div>
-          </div>
-          <div class = "modal-footer">
-
-            <button type = "submit" name = "submitEditFileForm" class = "btn btn-primary mr-auto">Save changes</button>
-            </form>
-            <button type = "button" class = "btn btn-secondary" data-dismiss = "modal">Cancel</button>
           </div>
         </div>
       </div>
@@ -272,12 +259,12 @@
               <!-- all files tab -->
               <div class = "tab-pane fade show active" id = "all-tab-div" role = "tabpanel" aria-labelledby = "all-tab">
                 <div class="row">
-
                   <?php
                   $user_id = $_SESSION['id'];
                   $sql = "SELECT id, id_user, name, type, date_inserted FROM file WHERE id_user = $user_id";
                   $resultset = $mysqli->query($sql);
                   while($rows = mysqli_fetch_array($resultset) ) {
+                    require 'editFilePopup.html';
                     if ($rows["type"] == 'PNG' || $rows["type"] == 'JPG') {
                       ?>
                       <div class="col-sm-5 col-md-5 col-lg-4 col-xl-2 border nopadding">
@@ -287,7 +274,7 @@
                           </a>
                         </div>
 
-                        <div class="col-sm-12 pt-1 center_text">
+                        <div class="col-sm-12 pt-1 center_text text-truncate">
                           <strong><?php echo $rows["name"]; ?></strong><br>
                           <strong>Type: </strong>
                           <?php echo $rows["type"]; ?>
@@ -307,16 +294,16 @@
                               <button type = "submit" name = "submitDeleteFile" class = "btn btn-danger btn-block">
                                 <span class = "fas fa-trash-alt" aria-hidden = "true"></span>
                               </button>
-                              <div class = "form-group">
+                              <div class = "form-group nopadding">
                                 <input type = "hidden" class = "form-control" id = "idFileDelete" name = "idFileDelete" value = "<?php echo $rows["id"]; ?>">
                               </div>
-                              <div class = "form-group">
+                              <div class = "form-group nopadding">
                                 <input type = "hidden" class = "form-control" id = "idFileUserDelete" name = "idFileUserDelete" value = "<?php echo $rows["id_user"]; ?>">
                               </div>
-                              <div class = "form-group">
+                              <div class = "form-group nopadding">
                                 <input type = "hidden" class = "form-control" id = "fileExtDelete" name = "fileExtDelete" value = "<?php echo $rows["type"]; ?>">
                               </div>
-                              <div class = "form-group">
+                              <div class = "form-group nopadding">
                                 <input type = "hidden" class = "form-control" id = "fileNameDelete" name = "fileNameDelete" value = "<?php echo $rows["name"]; ?>">
                               </div>
                             </form>
@@ -330,7 +317,7 @@
                               <img class="col-sm-12 nopadding thumbnail" src = "http://localhost/web_visualizer/img/pdf.png">
                             </a>
                           </div>
-                          <div class="col-sm-12 pt-1 center_text">
+                          <div class="col-sm-12 pt-1 center_text text-truncate">
                             <strong><?php echo $rows["name"]; ?></strong><br>
                             <strong>Type: </strong>
                             <?php echo $rows["type"]; ?>
@@ -350,16 +337,16 @@
                                 <button type = "submit" name = "submitDeleteFile" class = "btn btn-danger btn-block">
                                   <span class = "fas fa-trash-alt" aria-hidden = "true"></span>
                                 </button>
-                                <div class = "form-group">
+                                <div class = "form-group nopadding">
                                   <input type = "hidden" class = "form-control" id = "idFileDelete" name = "idFileDelete" value = "<?php echo $rows["id"]; ?>">
                                 </div>
-                                <div class = "form-group">
+                                <div class = "form-group nopadding">
                                   <input type = "hidden" class = "form-control" id = "idFileUserDelete" name = "idFileUserDelete" value = "<?php echo $rows["id_user"]; ?>">
                                 </div>
-                                <div class = "form-group">
+                                <div class = "form-group nopadding">
                                   <input type = "hidden" class = "form-control" id = "fileExtDelete" name = "fileExtDelete" value = "<?php echo $rows["type"]; ?>">
                                 </div>
-                                <div class = "form-group">
+                                <div class = "form-group nopadding">
                                   <input type = "hidden" class = "form-control" id = "fileNameDelete" name = "fileNameDelete" value = "<?php echo $rows["name"]; ?>">
                                 </div>
                               </form>
@@ -380,6 +367,7 @@
                   $sql = "SELECT id, id_user, name, type, date_inserted FROM file WHERE id_user = $user_id";
                   $resultset = $mysqli->query($sql);
                   while($rows = mysqli_fetch_array($resultset) ) {
+                    require 'editFilePopup.html';
                     if ($rows["type"] == 'PNG' || $rows["type"] == 'JPG') {
                       ?>
                       <div class="col-sm-5 col-md-5 col-lg-4 col-xl-2 border nopadding">
@@ -389,7 +377,7 @@
                           </a>
                         </div>
 
-                        <div class="col-sm-12 pt-1 center_text">
+                        <div class="col-sm-12 pt-1 center_text text-truncate">
                           <strong><?php echo $rows["name"]; ?></strong><br>
                           <strong>Type: </strong>
                           <?php echo $rows["type"]; ?>
@@ -409,16 +397,16 @@
                               <button type = "submit" name = "submitDeleteFile" class = "btn btn-danger btn-block">
                                 <span class = "fas fa-trash-alt" aria-hidden = "true"></span>
                               </button>
-                              <div class = "form-group">
+                              <div class = "form-group nopadding">
                                 <input type = "hidden" class = "form-control" id = "idFileDelete" name = "idFileDelete" value = "<?php echo $rows["id"]; ?>">
                               </div>
-                              <div class = "form-group">
+                              <div class = "form-group nopadding">
                                 <input type = "hidden" class = "form-control" id = "idFileUserDelete" name = "idFileUserDelete" value = "<?php echo $rows["id_user"]; ?>">
                               </div>
-                              <div class = "form-group">
+                              <div class = "form-group nopadding">
                                 <input type = "hidden" class = "form-control" id = "fileExtDelete" name = "fileExtDelete" value = "<?php echo $rows["type"]; ?>">
                               </div>
-                              <div class = "form-group">
+                              <div class = "form-group nopadding">
                                 <input type = "hidden" class = "form-control" id = "fileNameDelete" name = "fileNameDelete" value = "<?php echo $rows["name"]; ?>">
                               </div>
                             </form>
@@ -439,6 +427,7 @@
                   $sql = "SELECT id, id_user, name, type, date_inserted FROM file WHERE id_user = $user_id";
                   $resultset = $mysqli->query($sql);
                   while($rows = mysqli_fetch_array($resultset) ) {
+                    require 'editFilePopup.html';
                     if ($rows["type"] == 'PDF') {
                 ?>
                   <div class="col-sm-5 col-md-5 col-lg-4 col-xl-2 border nopadding">
@@ -447,7 +436,7 @@
                         <img class="col-sm-12 nopadding thumbnail" src = "http://localhost/web_visualizer/img/pdf.png">
                       </a>
                     </div>
-                    <div class="col-sm-12 pt-1 center_text">
+                    <div class="col-sm-12 pt-1 center_text text-truncate">
                       <strong><?php echo $rows["name"]; ?></strong><br>
                       <strong>Type: </strong>
                       <?php echo $rows["type"]; ?>
@@ -467,16 +456,16 @@
                           <button type = "submit" name = "submitDeleteFile" class = "btn btn-danger btn-block">
                             <span class = "fas fa-trash-alt" aria-hidden = "true"></span>
                           </button>
-                          <div class = "form-group">
+                          <div class = "form-group nopadding">
                             <input type = "hidden" class = "form-control" id = "idFileDelete" name = "idFileDelete" value = "<?php echo $rows["id"]; ?>">
                           </div>
-                          <div class = "form-group">
+                          <div class = "form-group nopadding">
                             <input type = "hidden" class = "form-control" id = "idFileUserDelete" name = "idFileUserDelete" value = "<?php echo $rows["id_user"]; ?>">
                           </div>
-                          <div class = "form-group">
+                          <div class = "form-group nopadding">
                             <input type = "hidden" class = "form-control" id = "fileExtDelete" name = "fileExtDelete" value = "<?php echo $rows["type"]; ?>">
                           </div>
-                          <div class = "form-group">
+                          <div class = "form-group nopadding">
                             <input type = "hidden" class = "form-control" id = "fileNameDelete" name = "fileNameDelete" value = "<?php echo $rows["name"]; ?>">
                           </div>
                         </form>

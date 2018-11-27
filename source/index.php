@@ -85,12 +85,78 @@
                 </div>
                 <div class = "form-group">
                   <label for = "passwordRegister">Password</label>
-                  <input type = "password" class = "form-control" id = "passwordRegister" name = "passwordRegister" placeholder = "Password" required>
+                  <input type = "password" class = "form-control" id = "passwordRegister" pattern=".{8,}" name = "passwordRegister" placeholder = "Password" required>
                 </div>
+
+                <div id="passwordMessage" style="display: none">
+                  <p id="length" class="invalid">Minimum <b>8 characters</b></p>
+                </div>
+
+                <script>
+
+                  var myInput = document.getElementById("passwordRegister");
+                  var length = document.getElementById("length");
+
+                  // When the user clicks on the password field, show the message box
+                  myInput.onfocus = function() {
+                    document.getElementById("passwordMessage").style.display = "block";
+                  }
+
+                  // When the user clicks outside of the password field, hide the message box
+                  myInput.onblur = function() {
+                    document.getElementById("passwordMessage").style.display = "none";
+                  }
+
+                  // When the user starts to type something inside the password field
+                  myInput.onkeyup = function() {
+                    // Validate length
+                    if(myInput.value.length >= 8) {
+                      length.classList.remove("invalid");
+                      length.classList.add("valid");
+                    } else {
+                      length.classList.remove("valid");
+                      length.classList.add("invalid");
+                    }
+                  }
+                </script>
+
                 <div class = "form-group">
                   <label for = "confirmPassword">Confirm Password</label>
                   <input type = "password" class = "form-control" id = "confirmPassword" name = "confirmPassword" placeholder = "Confirm Password" required>
                 </div>
+
+                <div id="confirmPasswordMessage" style="display: none">
+                  <p id="matchPassword" class="invalid">Password fields need to match!</b></p>
+                </div>
+
+                <script>
+                  var password = document.getElementById("passwordRegister");
+                  var confirmPassword = document.getElementById("confirmPassword");
+                  var matchPassword = document.getElementById("matchPassword");
+
+                  // When the user clicks on the password field, show the message box
+                  confirmPassword.onfocus = function() {
+                      document.getElementById("confirmPasswordMessage").style.display = "block";
+                  }
+
+                  // When the user clicks outside of the password field, hide the message box
+                  confirmPassword.onblur = function() {
+                      document.getElementById("confirmPasswordMessage").style.display = "none";
+                  }
+
+                  // When the user starts to type something inside the password field
+                  confirmPassword.onkeyup = function() {
+                    // Validate length
+                    if(password.value == confirmPassword.value) {
+                      matchPassword.classList.remove("invalid");
+                      matchPassword.classList.add("valid");
+                    } else {
+                      matchPassword.classList.remove("valid");
+                      matchPassword.classList.add("invalid");
+                    }
+                  }
+                </script>
+
                 <br>
                 <button name = "signup" type = "submit" class = "btn btn-primary btn-block"><strong>Register</strong></button>
               </form>

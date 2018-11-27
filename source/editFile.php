@@ -1,5 +1,6 @@
 <?php
   require 'db.php';
+  session_start();
 
 
   ini_set('display_errors', 1);
@@ -23,9 +24,14 @@
       rename($file_old_path, $file_new_path);
     }
 
+    $_SESSION['message_type'] = "success";
+    $_SESSION['message'] = "File name edited!";
     header("location: home.php");
   } else {
-    //header("location: home.php");
+
+    $_SESSION['message_type'] = "danger";
+    $_SESSION['message'] = "Could't edit file name!";
+    header("location: home.php");
   }
 
 ?>
