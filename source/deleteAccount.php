@@ -1,9 +1,6 @@
 <?php
   require 'db.php';
   // delete account function handler
-  ini_set('display_errors', 1);
-  ini_set('display_startup_errors', 1);
-  error_reporting(E_ALL);
 
   if (isset($_GET['delete'])) {
     $id = $_GET['delete'];
@@ -23,15 +20,18 @@
 
     $result = $mysqli->query("DELETE FROM users WHERE id = $id");
 
-    session_destroy();
-    session_start();
-
     if (! $result) {
-      $_SESSION['message'] = "An error has occurred!";
+      session_destroy();
+      session_start();
+      $_SESSION['message_type'] = "danger";
+      $_SESSION['message'] = "Could't delete account!";
       header("location: index.php");
     } else {
-      $_SESSION['message'] = "Account deleted!";
-      header("location: index.php");
+      session_destroy();
+      session_start();
+      $_SESSION['message_type'] = "success";
+      $_SESSION['message'] = 'Account deleted!';
+      header("Location: index.php");
     }
   }
 ?>

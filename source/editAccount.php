@@ -17,9 +17,15 @@
     $_SESSION['email'] = $email;
     $_SESSION['first_name'] = $first_name;
     $_SESSION['last_name'] = $last_name;
+
+
+    $_SESSION['message_type'] = "success";
+    $_SESSION['message'] = "Account edited!";
     header("location: home.php");
   } else {
-    //header("location: home.php");
+    $_SESSION['message_type'] = "danger";
+    $_SESSION['message'] = "Could't edit account!";
+    header("location: home.php");
   }
 
 ?>

@@ -27,19 +27,7 @@
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.2/dist/jquery.fancybox.min.css" />
     <script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.2/dist/jquery.fancybox.min.js"></script>
-
-
   </head>
-
-  <!-- logout function -->
-  <?php
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-      if (isset($_POST['logout'])) {
-        session_destroy();
-        header("Location: index.php");
-      }
-    }
-  ?>
 
   <!-- script to show files with fancybox -->
   <script type = "text/javascript">
@@ -101,7 +89,7 @@
                   <div class = "row">
                     <div class = "col-lg-12">
                       <p>
-                        <form id = "logout" action = "home.php" method = "post">
+                        <form id = "logout" action = "logout.php" method = "post">
                           <button name = "logout" type = "submit" class = "btn btn-danger btn-block"><strong>Logout</strong></button>
                         </form>
                       </p>
@@ -225,11 +213,10 @@
     <!-- main home div -->
     <div class = "container-fluid">
       <div class = "row">
-        <div class = "col-md-1 col-sm-4 col-xs-12"></div>
-        <div class = "col-md-10 col-sm-4 col-xs-12 home-body row">
+        <div class = "mx-auto col-md-11 mt-4 row">
 
           <!-- upload div -->
-          <div class = "col-md-3 col-sm-4 col-xs-12 upload-div">
+          <div class = "col-xs-12 col-sm-12 col-md-5 col-lg-3 home-div">
             <h1 class = "text-center">Upload a File</h1>
             <hr/>
             <form id = "uploadFile" enctype = 'multipart/form-data' action = "uploadFile.php" method = "post">
@@ -238,7 +225,7 @@
               </div>
               <div class = "form-group">
                 <label for = "fileName">File Name</label>
-                <input type = "text" class = "form-control" id = "fileName" name = "fileName" placeholder = "File Name" required>
+                <input type = "text" class = "form-control" id = "fileName" name = "fileName" placeholder = "File Name">
               </div>
               <div class = "form-group">
                 <label for = "file">Choose File (PNG, JPG or PDF)</label>
@@ -247,10 +234,27 @@
               <br>
               <button name = "upload" type = "submit" class = "btn btn-primary btn-block"><strong>Upload</strong></button>
             </form>
+            <br>
+            <?php
+              if (isset($_SESSION['message'])) {
+                ?>
+                <div class = 'alert alert-<?php echo $_SESSION['message_type']; ?> danger alert-dismissible fade show' role = 'alert'>
+                  <?php echo $_SESSION['message']; ?>
+                  <button type = 'button' class = 'close' data-dismiss = 'alert' aria-label = 'Close'>
+                    <span aria-hidden = 'true'>&times;</span>
+                  </button>
+                </div>
+                <?php
+                unset($_SESSION['message_type']);
+                unset($_SESSION['message']);
+              }
+            ?>
+
           </div>
 
           <!-- gallery div -->
-          <div class = "col-md-9 col-sm-4 col-xs-12 gallery">
+          <div class = "col-sm-12 col-md-7 col-lg-9 gallery home-div">
+            <!-- gallery div tabs -->
             <ul class = "nav nav-tabs" id = "fileTab" role = "tablist">
               <li class = "nav-item">
                 <a class = "nav-link active" id = "all-tab" data-toggle = "tab" href = "#all-tab-div" role = "tab" aria-controls = "all-tab" aria-selected="true">All</a>
@@ -267,22 +271,184 @@
 
               <!-- all files tab -->
               <div class = "tab-pane fade show active" id = "all-tab-div" role = "tabpanel" aria-labelledby = "all-tab">
-                <?php
+                <div class="row">
+
+                  <?php
                   $user_id = $_SESSION['id'];
                   $sql = "SELECT id, id_user, name, type, date_inserted FROM file WHERE id_user = $user_id";
                   $resultset = $mysqli->query($sql);
                   while($rows = mysqli_fetch_array($resultset) ) {
                     if ($rows["type"] == 'PNG' || $rows["type"] == 'JPG') {
-                ?>
-                  <div class = "border file">
-                    <a data-fancybox = "allfiles" href = "http://localhost/web_visualizer/uploads/<?php echo $rows["id_user"]."_".$rows["id"]."_".$rows["name"].".".$rows["type"]; ?>">
-                      <img src = "http://localhost/web_visualizer/uploads/<?php echo $rows["id_user"]."_".$rows["id"]."_".$rows["name"].".".$rows["type"]; ?>" alt = "<?php echo $rows["name"] ?>"/>
-                    </a>
+                      ?>
+                      <div class="col-sm-5 col-md-5 col-lg-4 col-xl-2 border nopadding">
+                        <div class="col-sm-12 img-box border nopadding">
+                          <a class="col-sm-12 nopadding"  data-fancybox = "allfiles" href = "http://localhost/web_visualizer/uploads/<?php echo $rows["id_user"]."_".$rows["id"]."_".$rows["name"].".".$rows["type"]; ?>">
+                            <img class="col-sm-12 nopadding thumbnail" src = "http://localhost/web_visualizer/uploads/<?php echo $rows["id_user"]."_".$rows["id"]."_".$rows["name"].".".$rows["type"]; ?>" alt = "<?php echo $rows["name"] ?>"/>
+                          </a>
+                        </div>
 
-                    <div class = "text">
-                      <strong>Name: </strong>
-                      <?php echo $rows["name"]; ?>
-                      <br>
+                        <div class="col-sm-12 pt-1 center_text">
+                          <strong><?php echo $rows["name"]; ?></strong><br>
+                          <strong>Type: </strong>
+                          <?php echo $rows["type"]; ?>
+                          <br>
+                          <strong>Date: </strong>
+                          <?php echo $rows["date_inserted"]; ?>
+                        </div>
+
+                        <div class="row nopadding">
+                          <div class="col-md-6 nopadding">
+                            <button type = "button" class = "btn btn-primary btn-block" data-toggle = "modal" data-target = "#editFileModal">
+                              <span class = "fas fa-edit" aria-hidden = "true"></span>
+                            </button>
+                          </div>
+                          <div class="col-md-6 nopadding">
+                            <form id = "deleteFile" action = "deleteFile.php" method = "post">
+                              <button type = "submit" name = "submitDeleteFile" class = "btn btn-danger btn-block">
+                                <span class = "fas fa-trash-alt" aria-hidden = "true"></span>
+                              </button>
+                              <div class = "form-group">
+                                <input type = "hidden" class = "form-control" id = "idFileDelete" name = "idFileDelete" value = "<?php echo $rows["id"]; ?>">
+                              </div>
+                              <div class = "form-group">
+                                <input type = "hidden" class = "form-control" id = "idFileUserDelete" name = "idFileUserDelete" value = "<?php echo $rows["id_user"]; ?>">
+                              </div>
+                              <div class = "form-group">
+                                <input type = "hidden" class = "form-control" id = "fileExtDelete" name = "fileExtDelete" value = "<?php echo $rows["type"]; ?>">
+                              </div>
+                              <div class = "form-group">
+                                <input type = "hidden" class = "form-control" id = "fileNameDelete" name = "fileNameDelete" value = "<?php echo $rows["name"]; ?>">
+                              </div>
+                            </form>
+                          </div>
+                        </div>
+                      </div>
+                      <?php } else if ($rows["type"] == 'PDF') { ?>
+                        <div class="col-sm-5 col-md-5 col-lg-4 col-xl-2 border nopadding">
+                          <div class="col-sm-12 img-box border nopadding">
+                            <a data-fancybox = "allfiles" data-options='{"type" : "iframe", "iframe" : {"preload" : false, "css" : {"width" : "800px"}}}' href = "http://localhost/web_visualizer/uploads/<?php echo $rows["id_user"]."_".$rows["id"]."_".$rows["name"].".".$rows["type"]; ?>">
+                              <img class="col-sm-12 nopadding thumbnail" src = "http://localhost/web_visualizer/img/pdf.png">
+                            </a>
+                          </div>
+                          <div class="col-sm-12 pt-1 center_text">
+                            <strong><?php echo $rows["name"]; ?></strong><br>
+                            <strong>Type: </strong>
+                            <?php echo $rows["type"]; ?>
+                            <br>
+                            <strong>Date: </strong>
+                            <?php echo $rows["date_inserted"]; ?>
+                          </div>
+
+                          <div class="row nopadding">
+                            <div class="col-md-6 nopadding">
+                              <button type = "button" class = "btn btn-primary btn-block" data-toggle = "modal" data-target = "#editFileModal">
+                                <span class = "fas fa-edit" aria-hidden = "true"></span>
+                              </button>
+                            </div>
+                            <div class="col-md-6 nopadding">
+                              <form id = "deleteFile" action = "deleteFile.php" method = "post">
+                                <button type = "submit" name = "submitDeleteFile" class = "btn btn-danger btn-block">
+                                  <span class = "fas fa-trash-alt" aria-hidden = "true"></span>
+                                </button>
+                                <div class = "form-group">
+                                  <input type = "hidden" class = "form-control" id = "idFileDelete" name = "idFileDelete" value = "<?php echo $rows["id"]; ?>">
+                                </div>
+                                <div class = "form-group">
+                                  <input type = "hidden" class = "form-control" id = "idFileUserDelete" name = "idFileUserDelete" value = "<?php echo $rows["id_user"]; ?>">
+                                </div>
+                                <div class = "form-group">
+                                  <input type = "hidden" class = "form-control" id = "fileExtDelete" name = "fileExtDelete" value = "<?php echo $rows["type"]; ?>">
+                                </div>
+                                <div class = "form-group">
+                                  <input type = "hidden" class = "form-control" id = "fileNameDelete" name = "fileNameDelete" value = "<?php echo $rows["name"]; ?>">
+                                </div>
+                              </form>
+                            </div>
+                          </div>
+                        </div>
+                    <?php }
+                    } ?>
+                </div>
+              </div>
+
+              <!-- image files tab -->
+              <div class = "tab-pane fade" id = "image-tab-div" role = "tabpanel" aria-labelledby = "image-tab">
+                <div class="row">
+
+                  <?php
+                  $user_id = $_SESSION['id'];
+                  $sql = "SELECT id, id_user, name, type, date_inserted FROM file WHERE id_user = $user_id";
+                  $resultset = $mysqli->query($sql);
+                  while($rows = mysqli_fetch_array($resultset) ) {
+                    if ($rows["type"] == 'PNG' || $rows["type"] == 'JPG') {
+                      ?>
+                      <div class="col-sm-5 col-md-5 col-lg-4 col-xl-2 border nopadding">
+                        <div class="col-sm-12 img-box border nopadding">
+                          <a class="col-sm-12 nopadding"  data-fancybox = "images" href = "http://localhost/web_visualizer/uploads/<?php echo $rows["id_user"]."_".$rows["id"]."_".$rows["name"].".".$rows["type"]; ?>">
+                            <img class="col-sm-12 nopadding thumbnail" src = "http://localhost/web_visualizer/uploads/<?php echo $rows["id_user"]."_".$rows["id"]."_".$rows["name"].".".$rows["type"]; ?>" alt = "<?php echo $rows["name"] ?>"/>
+                          </a>
+                        </div>
+
+                        <div class="col-sm-12 pt-1 center_text">
+                          <strong><?php echo $rows["name"]; ?></strong><br>
+                          <strong>Type: </strong>
+                          <?php echo $rows["type"]; ?>
+                          <br>
+                          <strong>Date: </strong>
+                          <?php echo $rows["date_inserted"]; ?>
+                        </div>
+
+                        <div class="row nopadding">
+                          <div class="col-md-6 nopadding">
+                            <button type = "button" class = "btn btn-primary btn-block" data-toggle = "modal" data-target = "#editFileModal">
+                              <span class = "fas fa-edit" aria-hidden = "true"></span>
+                            </button>
+                          </div>
+                          <div class="col-md-6 nopadding">
+                            <form id = "deleteFile" action = "deleteFile.php" method = "post">
+                              <button type = "submit" name = "submitDeleteFile" class = "btn btn-danger btn-block">
+                                <span class = "fas fa-trash-alt" aria-hidden = "true"></span>
+                              </button>
+                              <div class = "form-group">
+                                <input type = "hidden" class = "form-control" id = "idFileDelete" name = "idFileDelete" value = "<?php echo $rows["id"]; ?>">
+                              </div>
+                              <div class = "form-group">
+                                <input type = "hidden" class = "form-control" id = "idFileUserDelete" name = "idFileUserDelete" value = "<?php echo $rows["id_user"]; ?>">
+                              </div>
+                              <div class = "form-group">
+                                <input type = "hidden" class = "form-control" id = "fileExtDelete" name = "fileExtDelete" value = "<?php echo $rows["type"]; ?>">
+                              </div>
+                              <div class = "form-group">
+                                <input type = "hidden" class = "form-control" id = "fileNameDelete" name = "fileNameDelete" value = "<?php echo $rows["name"]; ?>">
+                              </div>
+                            </form>
+                          </div>
+                        </div>
+                      </div>
+                  <?php }
+                  } ?>
+
+                </div>
+              </div>
+
+              <!-- pdf files tab -->
+              <div class = "tab-pane fade" id = "pdf-tab-div" role = "tabpanel" aria-labelledby = "pdf-tab">
+                <div class="row">
+                  <?php
+                  $user_id = $_SESSION['id'];
+                  $sql = "SELECT id, id_user, name, type, date_inserted FROM file WHERE id_user = $user_id";
+                  $resultset = $mysqli->query($sql);
+                  while($rows = mysqli_fetch_array($resultset) ) {
+                    if ($rows["type"] == 'PDF') {
+                ?>
+                  <div class="col-sm-5 col-md-5 col-lg-4 col-xl-2 border nopadding">
+                    <div class="col-sm-12 img-box border nopadding">
+                      <a data-fancybox = "pdfs" data-options='{"type" : "iframe", "iframe" : {"preload" : false, "css" : {"width" : "800px"}}}' href = "http://localhost/web_visualizer/uploads/<?php echo $rows["id_user"]."_".$rows["id"]."_".$rows["name"].".".$rows["type"]; ?>">
+                        <img class="col-sm-12 nopadding thumbnail" src = "http://localhost/web_visualizer/img/pdf.png">
+                      </a>
+                    </div>
+                    <div class="col-sm-12 pt-1 center_text">
+                      <strong><?php echo $rows["name"]; ?></strong><br>
                       <strong>Type: </strong>
                       <?php echo $rows["type"]; ?>
                       <br>
@@ -290,55 +456,15 @@
                       <?php echo $rows["date_inserted"]; ?>
                     </div>
 
-                    <div class = "modify">
-                      <button type = "button" class = "btn btn-primary" data-toggle = "modal" data-target = "#editFileModal">
-                        <span class = "fas fa-edit" aria-hidden = "true"></span>
-                      </button>
-
-                      <form id = "deleteFile" action = "deleteFile.php" method = "post">
-                        <button type = "submit" name = "submitDeleteFile" class = "btn btn-danger">
-                          <span class = "fas fa-trash-alt" aria-hidden = "true"></span>
-                        </button>
-                        <div class = "form-group">
-                          <input type = "hidden" class = "form-control" id = "idFileDelete" name = "idFileDelete" value = "<?php echo $rows["id"]; ?>">
-                        </div>
-                        <div class = "form-group">
-                          <input type = "hidden" class = "form-control" id = "idFileUserDelete" name = "idFileUserDelete" value = "<?php echo $rows["id_user"]; ?>">
-                        </div>
-                        <div class = "form-group">
-                          <input type = "hidden" class = "form-control" id = "fileExtDelete" name = "fileExtDelete" value = "<?php echo $rows["type"]; ?>">
-                        </div>
-                        <div class = "form-group">
-                          <input type = "hidden" class = "form-control" id = "fileNameDelete" name = "fileNameDelete" value = "<?php echo $rows["name"]; ?>">
-                        </div>
-                      </form>
-                    </div>
-
-                  </div>
-                <?php } else { ?>
-                  <div class = "border file">
-                    <a data-fancybox = "allfiles" data-options='{"type" : "iframe", "iframe" : {"preload" : false, "css" : {"width" : "800px"}}}' href = "http://localhost/web_visualizer/uploads/<?php echo $rows["id_user"]."_".$rows["id"]."_".$rows["name"].".".$rows["type"]; ?>">
-                      <span class = "pdf far fa-file-pdf"></span>
-                    </a>
-                    <div class = "info">
-                      <div class = "text">
-                        <strong>Name: </strong>
-                        <?php echo $rows["name"]; ?>
-                        <br>
-                        <strong>Type: </strong>
-                        <?php echo $rows["type"]; ?>
-                        <br>
-                        <strong>Date: </strong>
-                        <?php echo $rows["date_inserted"]; ?>
-                      </div>
-
-                      <div class = "modify">
-                        <button type = "button" class = "btn btn-primary" data-toggle = "modal" data-target = "#editFileModal">
+                    <div class="row nopadding">
+                      <div class="col-md-6 nopadding">
+                        <button type = "button" class = "btn btn-primary btn-block" data-toggle = "modal" data-target = "#editFileModal">
                           <span class = "fas fa-edit" aria-hidden = "true"></span>
                         </button>
-
+                      </div>
+                      <div class="col-md-6 nopadding">
                         <form id = "deleteFile" action = "deleteFile.php" method = "post">
-                          <button type = "submit" name = "submitDeleteFile" class = "btn btn-danger">
+                          <button type = "submit" name = "submitDeleteFile" class = "btn btn-danger btn-block">
                             <span class = "fas fa-trash-alt" aria-hidden = "true"></span>
                           </button>
                           <div class = "form-group">
@@ -355,129 +481,23 @@
                           </div>
                         </form>
                       </div>
-
-                    </div>
-                  </div>
-                <?php } } ?>
-
-              </div>
-
-              <!-- image files tab -->
-              <div class = "tab-pane fade" id = "image-tab-div" role = "tabpanel" aria-labelledby = "image-tab">
-                <?php
-                  $user_id = $_SESSION['id'];
-                  $sql = "SELECT id, id_user, name, type, date_inserted FROM file WHERE id_user = $user_id";
-                  $resultset = $mysqli->query($sql);
-                  while($rows = mysqli_fetch_array($resultset) ) {
-                    if ($rows["type"] == 'PNG' || $rows["type"] == 'JPG') {
-                ?>
-                  <div class = "border file">
-                    <a data-fancybox = "images" href = "http://localhost/web_visualizer/uploads/<?php echo $rows["id_user"]."_".$rows["id"]."_".$rows["name"].".".$rows["type"]; ?>">
-                      <img src = "http://localhost/web_visualizer/uploads/<?php echo $rows["id_user"]."_".$rows["id"]."_".$rows["name"].".".$rows["type"]; ?>" alt = "<?php echo $rows["name"] ?>"/>
-                    </a>
-                    <div class = "info">
-                      <div class = "text">
-                        <strong>Name: </strong>
-                        <?php echo $rows["name"]; ?>
-                        <br>
-                        <strong>Type: </strong>
-                        <?php echo $rows["type"]; ?>
-                        <br>
-                        <strong>Date: </strong>
-                        <?php echo $rows["date_inserted"]; ?>
-                      </div>
-                    </div>
-                    <div class = "modify">
-                      <button type = "button" class = "btn btn-primary" data-toggle = "modal" data-target = "#editFileModal">
-                        <span class = "fas fa-edit" aria-hidden = "true"></span>
-                      </button>
-
-                      <form id = "deleteFile" action = "deleteFile.php" method = "post">
-                        <button type = "submit" name = "submitDeleteFile" class = "btn btn-danger">
-                          <span class = "fas fa-trash-alt" aria-hidden = "true"></span>
-                        </button>
-                        <div class = "form-group">
-                          <input type = "hidden" class = "form-control" id = "idFileDelete" name = "idFileDelete" value = "<?php echo $rows["id"]; ?>">
-                        </div>
-                        <div class = "form-group">
-                          <input type = "hidden" class = "form-control" id = "idFileUserDelete" name = "idFileUserDelete" value = "<?php echo $rows["id_user"]; ?>">
-                        </div>
-                        <div class = "form-group">
-                          <input type = "hidden" class = "form-control" id = "fileExtDelete" name = "fileExtDelete" value = "<?php echo $rows["type"]; ?>">
-                        </div>
-                        <div class = "form-group">
-                          <input type = "hidden" class = "form-control" id = "fileNameDelete" name = "fileNameDelete" value = "<?php echo $rows["name"]; ?>">
-                        </div>
-                      </form>
-                    </div>
-                  </div>
-                <?php } } ?>
-
-              </div>
-
-              <!-- pdf files tab -->
-              <div class = "tab-pane fade" id = "pdf-tab-div" role = "tabpanel" aria-labelledby = "pdf-tab">
-                <?php
-                  $user_id = $_SESSION['id'];
-                  $sql = "SELECT id, id_user, name, type, date_inserted FROM file WHERE id_user = $user_id";
-                  $resultset = $mysqli->query($sql);
-                  while($rows = mysqli_fetch_array($resultset) ) {
-                    if ($rows["type"] == 'PDF') {
-                ?>
-                  <div class = "border file">
-                    <a data-fancybox = "pdfs" data-options='{"type" : "iframe", "iframe" : {"preload" : false, "css" : {"width" : "800px"}}}' href = "http://localhost/web_visualizer/uploads/<?php echo $rows["id_user"]."_".$rows["id"]."_".$rows["name"].".".$rows["type"]; ?>">
-                      <span class = "pdf far fa-file-pdf"></span>
-                    </a>
-                    <div class = "info">
-                      <div class = "text">
-                        <strong>Name: </strong>
-                        <?php echo $rows["name"]; ?>
-                        <br>
-                        <strong>Type: </strong>
-                        <?php echo $rows["type"]; ?>
-                        <br>
-                        <strong>Date: </strong>
-                        <?php echo $rows["date_inserted"]; ?>
-                      </div>
-                    </div>
-                    <div class = "modify">
-                      <button type = "button" class = "btn btn-primary" data-toggle = "modal" data-target = "#editFileModal">
-                        <span class = "fas fa-edit" aria-hidden = "true"></span>
-                      </button>
-
-                      <form id = "deleteFile" action = "deleteFile.php" method = "post">
-                        <button type = "submit" name = "submitDeleteFile" class = "btn btn-danger">
-                          <span class = "fas fa-trash-alt" aria-hidden = "true"></span>
-                        </button>
-                        <div class = "form-group">
-                          <input type = "hidden" class = "form-control" id = "idFileDelete" name = "idFileDelete" value = "<?php echo $rows["id"]; ?>">
-                        </div>
-                        <div class = "form-group">
-                          <input type = "hidden" class = "form-control" id = "idFileUserDelete" name = "idFileUserDelete" value = "<?php echo $rows["id_user"]; ?>">
-                        </div>
-                        <div class = "form-group">
-                          <input type = "hidden" class = "form-control" id = "fileExtDelete" name = "fileExtDelete" value = "<?php echo $rows["type"]; ?>">
-                        </div>
-                        <div class = "form-group">
-                          <input type = "hidden" class = "form-control" id = "fileNameDelete" name = "fileNameDelete" value = "<?php echo $rows["name"]; ?>">
-                        </div>
-                      </form>
                     </div>
                   </div>
 
                 <?php } } ?>
+                </div>
               </div>
+
             </div>
           </div>
         </div>
-        <div class = "col-md-1 col-sm-4 col-xs-12"></div>
       </div>
-    </div>
 
-    <footer class = "py-3">
-      <div class = "container">
-        <p class = "m-0 text-center text-white">Developed by Vitor Forbrig. Copyright &copy; 2018</p>
-      </div>
-    </footer>
+      <footer class = "py-3">
+        <div class = "container">
+          <p class = "m-0 text-center text-white">Developed by Vitor Forbrig. Copyright &copy; 2018</p>
+        </div>
+      </footer>
+    </div>
   </body>
 </html>

@@ -1,5 +1,4 @@
 <?php
-  require 'db.php';
   session_start();
 ?>
 
@@ -17,31 +16,23 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
   </head>
 
-  <?php
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-      if (isset($_POST['login'])) {
-        require 'login.php';
-      } elseif (isset($_POST['signup'])) {
-        require 'signup.php';
-      }
-    }
-  ?>
-
   <body>
     <div class = "container-fluid">
       <div class = "row">
-        <div class = "col-md-4 col-sm-4 col-xs-12"></div>
-        <div class = "col-md-4 col-sm-4 col-xs-12 form-container">
+        <div class = "mx-auto col-xs-12 col-sm-8 col-md-8 col-lg-6 col-xl-4 form-container">
 
           <?php
-            if (isset($_SESSION['message']) and !empty($_SESSION['message'])) {
-              echo "
-              <div class = 'alert alert-danger alert-dismissible fade show' role = 'alert'>
-              ".$_SESSION['message']."
+            if (isset($_SESSION['message'])) {
+              ?>
+              <div class = 'alert alert-<?php echo $_SESSION['message_type']; ?> danger alert-dismissible fade show' role = 'alert'>
+                <?php echo $_SESSION['message']; ?>
                 <button type = 'button' class = 'close' data-dismiss = 'alert' aria-label = 'Close'>
                   <span aria-hidden = 'true'>&times;</span>
                 </button>
-              </div>";
+              </div>
+              <?php
+              unset($_SESSION['message_type']);
+              unset($_SESSION['message']);
             }
           ?>
 
@@ -57,7 +48,7 @@
           <div class = "tab-content">
             <div class = "tab-pane show active fade mt-4" id = "login">
               <h1 class = "text-center">Welcome Back!</h1>
-              <form id = "login" action = "index.php" method = "post">
+              <form id = "login" action = "login.php" method = "post">
                 <div class = "form-group">
                   <label for = "emailLogin">Email</label>
                   <input type = "email" class = "form-control" id = "emailLogin" name = "emailLogin" aria-describedby = "emailHelp" placeholder = "Email" required>
@@ -77,39 +68,35 @@
                 <button name = "login" type = "submit" class = "btn btn-primary btn-block"><strong>Login</strong></button>
               </form>
             </div>
-
             <div class = "tab-pane fade mt-4" id = "signup">
-                <h1 class = "text-center">Sign up now!</h1>
-                <form id = "signup" action = "index.php" method = "post">
-                  <div class = "form-group">
-                    <label for = "firstNameRegister">First Name</label>
-                    <input type = "text" class = "form-control" id = "firstNameRegister" name = "firstNameRegister" placeholder = "First Name" required>
-                  </div>
-                  <div class = "form-group">
-                    <label for = "lastNameRegister">Last Name</label>
-                    <input type = "text" class = "form-control" id = "lastNameRegister" name = "lastNameRegister" placeholder = "Last Name" required>
-                  </div>
-                  <div class = "form-group">
-                    <label for = "emailRegister">Email</label>
-                    <input type = "email" class = "form-control" id = "emailRegister" name = "emailRegister" placeholder = "Email" required>
-                  </div>
-                  <div class = "form-group">
-                    <label for = "passwordRegister">Password</label>
-                    <input type = "password" class = "form-control" id = "passwordRegister" name = "passwordRegister" placeholder = "Password" required>
-                  </div>
-                  <div class = "form-group">
-                    <label for = "confirmPassword">Confirm Password</label>
-                    <input type = "password" class = "form-control" id = "confirmPassword" name = "confirmPassword" placeholder = "Confirm Password" required>
-                  </div>
-                  <br>
-                  <button name = "signup" type = "submit" class = "btn btn-primary btn-block"><strong>Register</strong></button>
-                </form>
-              </div>
+              <h1 class = "text-center">Sign up now!</h1>
+              <form id = "signup" action = "signup.php" method = "post">
+                <div class = "form-group">
+                  <label for = "firstNameRegister">First Name</label>
+                  <input type = "text" class = "form-control" id = "firstNameRegister" name = "firstNameRegister" placeholder = "First Name" required>
+                </div>
+                <div class = "form-group">
+                  <label for = "lastNameRegister">Last Name</label>
+                  <input type = "text" class = "form-control" id = "lastNameRegister" name = "lastNameRegister" placeholder = "Last Name" required>
+                </div>
+                <div class = "form-group">
+                  <label for = "emailRegister">Email</label>
+                  <input type = "email" class = "form-control" id = "emailRegister" name = "emailRegister" placeholder = "Email" required>
+                </div>
+                <div class = "form-group">
+                  <label for = "passwordRegister">Password</label>
+                  <input type = "password" class = "form-control" id = "passwordRegister" name = "passwordRegister" placeholder = "Password" required>
+                </div>
+                <div class = "form-group">
+                  <label for = "confirmPassword">Confirm Password</label>
+                  <input type = "password" class = "form-control" id = "confirmPassword" name = "confirmPassword" placeholder = "Confirm Password" required>
+                </div>
+                <br>
+                <button name = "signup" type = "submit" class = "btn btn-primary btn-block"><strong>Register</strong></button>
+              </form>
             </div>
           </div>
-
         </div>
-        <div class = "col-md-4 col-sm-4 col-xs-12"></div>
       </div>
     </div>
 
