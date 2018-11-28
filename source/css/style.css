@@ -50,7 +50,11 @@ body {
 
 .gallery {
   height: 85vh;
-  overflow-y: scroll;
+}
+
+.scroll {
+  height: 83vh;
+  overflow-y: auto;
 }
 
 .center_text {
@@ -62,14 +66,49 @@ body {
   margin: 0 !important;
 }
 
-.img-box {
-  background-color: grey;
-  height: 20vh;
+@media (max-width: 576px) {
+  .img-box {
+    overflow: hidden;
+    background-color: grey;
+    height: 50vw;
+  }
+}
+
+@media (min-width: 576px) and (max-width: 768px) {
+  .img-box {
+    overflow: hidden;
+    background-color: grey;
+    height: 30vw;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 992px) {
+  .img-box {
+    overflow: hidden;
+    background-color: grey;
+    height: 15vw;
+  }
+}
+
+@media (min-width: 992px) and (max-width: 1200px) {
+  .img-box {
+    overflow: hidden;
+    background-color: grey;
+    height: 10vw;
+  }
+}
+
+@media (min-width: 1200px) {
+  .img-box {
+    overflow: hidden;
+    background-color: grey;
+    height: 6vw;
+  }
 }
 
 .thumbnail {
   margin-top: -1px;
-  max-height: 20vh;
+  height: auto;
 }
 
 .invalid {
