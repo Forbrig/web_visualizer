@@ -19,18 +19,18 @@
   <body>
     <div class = "container-fluid">
       <div class = "row">
-        <div class = "mx-auto col-xs-12 col-sm-8 col-md-8 col-lg-6 col-xl-4 form-container">
+        <div class = "mt-5 mx-auto col-xs-12 col-sm-8 col-md-8 col-lg-6 col-xl-4 form-container">
 
           <?php
             if (isset($_SESSION['message'])) {
-              ?>
-              <div class = 'alert alert-<?php echo $_SESSION['message_type']; ?> danger alert-dismissible fade show' role = 'alert'>
-                <?php echo $_SESSION['message']; ?>
-                <button type = 'button' class = 'close' data-dismiss = 'alert' aria-label = 'Close'>
-                  <span aria-hidden = 'true'>&times;</span>
-                </button>
-              </div>
-              <?php
+              echo "
+                <div class = 'alert alert-".$_SESSION['message_type']." danger alert-dismissible fade show' role = 'alert'>
+                  ".$_SESSION['message']."
+                  <button type = 'button' class = 'close' data-dismiss = 'alert' aria-label = 'Close'>
+                    <span aria-hidden = 'true'>&times;</span>
+                  </button>
+                </div>
+              ";
               unset($_SESSION['message_type']);
               unset($_SESSION['message']);
             }
@@ -165,10 +165,9 @@
         </div>
       </div>
     </div>
-
     <footer class = "py-3">
       <div class = "container">
-        <p class = "m-0 text-center text-white">Developed by Vitor Forbrig. Copyright &copy; 2018</p>
+        <p class = "text-center text-white">Developed by Vitor Forbrig. Copyright &copy; 2018</p>
       </div>
     </footer>
   </body>

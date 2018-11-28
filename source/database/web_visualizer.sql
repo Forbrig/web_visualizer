@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: 23-Nov-2018 às 20:59
+-- Generation Time: 28-Nov-2018 às 02:24
 -- Versão do servidor: 10.2.18-MariaDB
 -- versão do PHP: 7.2.12
 
@@ -36,18 +36,6 @@ CREATE TABLE `file` (
   `date_inserted` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Extraindo dados da tabela `file`
---
-
-INSERT INTO `file` (`id`, `id_user`, `name`, `type`, `date_inserted`) VALUES
-(30, 23, 'teste', 'JPG', '2018-11-23 20:15:21'),
-(31, 23, 'teste', 'JPG', '2018-11-23 20:15:33'),
-(32, 23, 'teste', 'PNG', '2018-11-23 20:15:43'),
-(33, 23, 'teste', 'PDF', '2018-11-23 20:15:57'),
-(34, 23, 'teste', 'PDF', '2018-11-23 20:16:07'),
-(35, 24, 'teste', 'PNG', '2018-11-23 20:24:44');
-
 -- --------------------------------------------------------
 
 --
@@ -62,14 +50,6 @@ CREATE TABLE `users` (
   `password` varchar(100) NOT NULL,
   `hash` varchar(32) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Extraindo dados da tabela `users`
---
-
-INSERT INTO `users` (`id`, `email`, `first_name`, `last_name`, `password`, `hash`) VALUES
-(23, 'vitorforbrig@gmail.com', 'VITOR', 'FORBRIG', '$2y$10$I.Dum2/Rti1weZMMaw/PNO/WslXDN1V5zniZbUmnlgIEvNQJSctnO', '01386bd6d8e091c2ab4c7c7de644d37b'),
-(24, 'marceloacordi@gmail.com', 'Marcelo', 'Acordi', '$2y$10$SYdszLNqJy9cWDV5Kh9R/e06IE8pNvkcODe4AJbt9xKpev5em3jsK', '4734ba6f3de83d861c3176a6273cac6d');
 
 --
 -- Indexes for dumped tables
@@ -97,13 +77,13 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `file`
 --
 ALTER TABLE `file`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=70;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
 -- Constraints for dumped tables

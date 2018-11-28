@@ -224,14 +224,14 @@
             <br>
             <?php
               if (isset($_SESSION['message'])) {
-                ?>
-                <div class = 'alert alert-<?php echo $_SESSION['message_type']; ?> danger alert-dismissible fade show' role = 'alert'>
-                  <?php echo $_SESSION['message']; ?>
-                  <button type = 'button' class = 'close' data-dismiss = 'alert' aria-label = 'Close'>
-                    <span aria-hidden = 'true'>&times;</span>
-                  </button>
-                </div>
-                <?php
+                echo "
+                  <div class = 'alert alert-".$_SESSION['message_type']." danger alert-dismissible fade show' role = 'alert'>
+                    ".$_SESSION['message']."
+                    <button type = 'button' class = 'close' data-dismiss = 'alert' aria-label = 'Close'>
+                      <span aria-hidden = 'true'>&times;</span>
+                    </button>
+                  </div>
+                ";
                 unset($_SESSION['message_type']);
                 unset($_SESSION['message']);
               }
@@ -269,8 +269,8 @@
                       ?>
                       <div class="col-sm-5 col-md-5 col-lg-4 col-xl-2 border nopadding">
                         <div class="col-sm-12 img-box border nopadding">
-                          <a class="col-sm-12 nopadding"  data-fancybox = "allfiles" href = "http://localhost/web_visualizer/uploads/<?php echo $rows["id_user"]."_".$rows["id"]."_".$rows["name"].".".$rows["type"]; ?>">
-                            <img class="col-sm-12 nopadding thumbnail" src = "http://localhost/web_visualizer/uploads/<?php echo $rows["id_user"]."_".$rows["id"]."_".$rows["name"].".".$rows["type"]; ?>" alt = "<?php echo $rows["name"] ?>"/>
+                          <a class="col-sm-12 nopadding"  data-fancybox = "allfiles" href = "uploads/<?php echo $rows["id_user"]."_".$rows["id"]."_".$rows["name"].".".$rows["type"]; ?>">
+                            <img class="col-sm-12 nopadding thumbnail" src = "uploads/<?php echo $rows["id_user"]."_".$rows["id"]."_".$rows["name"].".".$rows["type"]; ?>" alt = "<?php echo $rows["name"] ?>"/>
                           </a>
                         </div>
 
@@ -313,8 +313,8 @@
                       <?php } else if ($rows["type"] == 'PDF') { ?>
                         <div class="col-sm-5 col-md-5 col-lg-4 col-xl-2 border nopadding">
                           <div class="col-sm-12 img-box border nopadding">
-                            <a data-fancybox = "allfiles" data-options='{"type" : "iframe", "iframe" : {"preload" : false, "css" : {"width" : "800px"}}}' href = "http://localhost/web_visualizer/uploads/<?php echo $rows["id_user"]."_".$rows["id"]."_".$rows["name"].".".$rows["type"]; ?>">
-                              <img class="col-sm-12 nopadding thumbnail" src = "http://localhost/web_visualizer/img/pdf.png">
+                            <a data-fancybox = "allfiles" data-options='{"type" : "iframe", "iframe" : {"preload" : false, "css" : {"width" : "800px"}}}' href = "uploads/<?php echo $rows["id_user"]."_".$rows["id"]."_".$rows["name"].".".$rows["type"]; ?>">
+                              <img class="col-sm-12 nopadding thumbnail" src = "img/pdf.png">
                             </a>
                           </div>
                           <div class="col-sm-12 pt-1 center_text text-truncate">
@@ -372,8 +372,8 @@
                       ?>
                       <div class="col-sm-5 col-md-5 col-lg-4 col-xl-2 border nopadding">
                         <div class="col-sm-12 img-box border nopadding">
-                          <a class="col-sm-12 nopadding"  data-fancybox = "images" href = "http://localhost/web_visualizer/uploads/<?php echo $rows["id_user"]."_".$rows["id"]."_".$rows["name"].".".$rows["type"]; ?>">
-                            <img class="col-sm-12 nopadding thumbnail" src = "http://localhost/web_visualizer/uploads/<?php echo $rows["id_user"]."_".$rows["id"]."_".$rows["name"].".".$rows["type"]; ?>" alt = "<?php echo $rows["name"] ?>"/>
+                          <a class="col-sm-12 nopadding"  data-fancybox = "images" href = "uploads/<?php echo $rows["id_user"]."_".$rows["id"]."_".$rows["name"].".".$rows["type"]; ?>">
+                            <img class="col-sm-12 nopadding thumbnail" src = "uploads/<?php echo $rows["id_user"]."_".$rows["id"]."_".$rows["name"].".".$rows["type"]; ?>" alt = "<?php echo $rows["name"] ?>"/>
                           </a>
                         </div>
 
@@ -432,8 +432,8 @@
                 ?>
                   <div class="col-sm-5 col-md-5 col-lg-4 col-xl-2 border nopadding">
                     <div class="col-sm-12 img-box border nopadding">
-                      <a data-fancybox = "pdfs" data-options='{"type" : "iframe", "iframe" : {"preload" : false, "css" : {"width" : "800px"}}}' href = "http://localhost/web_visualizer/uploads/<?php echo $rows["id_user"]."_".$rows["id"]."_".$rows["name"].".".$rows["type"]; ?>">
-                        <img class="col-sm-12 nopadding thumbnail" src = "http://localhost/web_visualizer/img/pdf.png">
+                      <a data-fancybox = "pdfs" data-options='{"type" : "iframe", "iframe" : {"preload" : false, "css" : {"width" : "800px"}}}' href = "uploads/<?php echo $rows["id_user"]."_".$rows["id"]."_".$rows["name"].".".$rows["type"]; ?>">
+                        <img class="col-sm-12 nopadding thumbnail" src = "img/pdf.png">
                       </a>
                     </div>
                     <div class="col-sm-12 pt-1 center_text text-truncate">
