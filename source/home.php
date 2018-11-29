@@ -187,20 +187,20 @@
           <div class="modal-body">
             <form action="editFile.php" method="post">
               <div class="form-group">
-                <input type="hidden" class="form-control" name="idFile" value="<?php echo $rows["id"]; ?>">
+                <input type="hidden" class="form-control" name="idFile" id="idFile" value="">
               </div>
               <div class="form-group">
-                <input type="hidden" class="form-control" name="idFileUser" value="<?php echo $rows["id_user"]; ?>">
+                <input type="hidden" class="form-control" name="idFileUser" id="idFileUser" value="">
               </div>
               <div class="form-group">
-                <input type="hidden" class="form-control" name="fileExt" value="<?php echo $rows["type"]; ?>">
+                <input type="hidden" class="form-control" name="fileExt" id="fileExt" value="">
               </div>
               <div class="form-group">
-                <input type="hidden" class="form-control" name="oldFileName" value="<?php echo $rows["name"]; ?>">
+                <input type="hidden" class="form-control" name="oldFileName" id="oldFileName" value="">
               </div>
               <div class="form-group">
                 <label for="fileNameEdit">File Name</label>
-                <input type="text" class="form-control" name="fileNameEdit" placeholder="File Name" value="<?php echo $rows["name"]; ?>" required>
+                <input type="text" class="form-control" name="fileNameEdit" id="fileNameEdit" placeholder="File Name" value="" required>
               </div>
           </div>
           <div class="modal-footer">
@@ -302,7 +302,12 @@
 
                           <div class="row nopadding">
                             <div class="col-md-6 nopadding">
-                              <button type="button" class="btn btn-primary btn-block" data-id=<?php echo $rows["id"]; ?> data-toggle="modal" data-target="#editFileModal">
+                              <button type="button" class="btn btn-primary btn-block"
+                               data-id="<?php echo $rows["id"]; ?>"
+                               data-id_user="<?php echo $rows["id_user"]; ?>"
+                               data-name="<?php echo $rows["name"]; ?>"
+                               data-type="<?php echo $rows["type"]; ?>"
+                               data-toggle="modal" data-target="#editFileModal">
                                 <span class="fas fa-edit" aria-hidden="true"></span>
                               </button>
                             </div>
@@ -335,7 +340,7 @@
                                 <img class="col-sm-12 nopadding thumbnail" src="img/pdf.png">
                               </a>
                             </div>
-                            <div class="col-sm-12 pt-1 center_text text-truncate">
+                            <div class="col-sm-12 pt-1 center_text text-truncate border">
                               <strong><?php echo $rows["name"]; ?></strong><br>
                               <strong>Type: </strong>
                               <?php echo $rows["type"]; ?>
@@ -346,7 +351,12 @@
 
                             <div class="row nopadding">
                               <div class="col-md-6 nopadding">
-                                <button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#editFileModal">
+                                <button type="button" class="btn btn-primary btn-block"
+                                 data-id="<?php echo $rows["id"]; ?>"
+                                 data-id_user="<?php echo $rows["id_user"]; ?>"
+                                 data-name="<?php echo $rows["name"]; ?>"
+                                 data-type="<?php echo $rows["type"]; ?>"
+                                 data-toggle="modal" data-target="#editFileModal">
                                   <span class="fas fa-edit" aria-hidden="true"></span>
                                 </button>
                               </div>
@@ -404,7 +414,12 @@
 
                           <div class="row nopadding">
                             <div class="col-md-6 nopadding">
-                              <button type="button" class="btn btn-primary btn-block" data-id=<?php echo $rows["id"]; ?> data-toggle="modal" data-target="#editFileModal">
+                              <button type="button" class="btn btn-primary btn-block"
+                               data-id="<?php echo $rows["id"]; ?>"
+                               data-id_user="<?php echo $rows["id_user"]; ?>"
+                               data-name="<?php echo $rows["name"]; ?>"
+                               data-type="<?php echo $rows["type"]; ?>"
+                               data-toggle="modal" data-target="#editFileModal">
                                 <span class="fas fa-edit" aria-hidden="true"></span>
                               </button>
                             </div>
@@ -452,7 +467,7 @@
                               <img class="col-sm-12 nopadding thumbnail" src="img/pdf.png">
                             </a>
                           </div>
-                          <div class="col-sm-12 pt-1 center_text text-truncate">
+                          <div class="col-sm-12 pt-1 center_text text-truncate border">
                             <strong><?php echo $rows["name"]; ?></strong><br>
                             <strong>Type: </strong>
                             <?php echo $rows["type"]; ?>
@@ -463,7 +478,12 @@
 
                           <div class="row nopadding">
                             <div class="col-md-6 nopadding">
-                              <button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#editFileModal">
+                              <button type="button" class="btn btn-primary btn-block"
+                               data-id="<?php echo $rows["id"]; ?>"
+                               data-id_user="<?php echo $rows["id_user"]; ?>"
+                               data-name="<?php echo $rows["name"]; ?>"
+                               data-type="<?php echo $rows["type"]; ?>"
+                               data-toggle="modal" data-target="#editFileModal">
                                 <span class="fas fa-edit" aria-hidden="true"></span>
                               </button>
                             </div>
@@ -518,6 +538,21 @@
     <script src="js/jquery.fancybox.min.js"></script>
 
     <!-- Assets -->
+    <script>
+      $(document).ready(function(){
+        $("[data-target='#editFileModal']").on("click", function(){
+          var id = $(this).data("id");
+          var id_user = $(this).data("id_user");
+          var name = $(this).data("name");
+          var type = $(this).data("type");
+          $("#idFile").val(id);
+          $("#idFileUser").val(id_user);
+          $("#fileExt").val(type);
+          $("#oldFileName").val(name);
+          $("#fileNameEdit").val(name);
+        });
+      });
+    </script>
 
     <script src="js/fancybox.js"></script>
   </body>
